@@ -3,54 +3,48 @@ TRABALHO FINAL - SMD0017 - PROGRAMAÇÃO ORIENTADA A OBJETOS (UFC - IUVI)
 PROJETO: Sistema de Gestão e Telemetria de Baterias (BMS)
 ================================================================================
 
-OBSERVAÇÃO: Preencha os campos [PREENCHER] com os nomes, matrículas e papéis
-reais dos integrantes da equipe (máximo 3 alunos) antes da entrega no SOLAR.
-
 --------------------------------------------------------------------------------
-1. COMPONENTES DA EQUIPE
+1. INTEGRANTES DA EQUIPE
 --------------------------------------------------------------------------------
 
 Integrante 1:
-- Nome completo : [PREENCHER: Nome do Integrante 1]
-- Matrícula     : [PREENCHER: Matrícula]
-- Papel         : [PREENCHER: Ex.: Arquitetura, Interfaces, Classes Abstratas e Células]
+- Nome completo : Ian Wanderley Gomes
+- Matrícula     : 514321
+- Papel         : Interfaces e Classes Abstratas, Células e Diagrama UML
 
 Integrante 2:
-- Nome completo : [PREENCHER: Nome do Integrante 2]
-- Matrícula     : [PREENCHER: Matrícula]
-- Papel         : [PREENCHER: Ex.: Módulos, Sensores, ControladorBMS e Conversores]
+- Nome completo : Marcos Venicius De Oliveira Pinto
+- Matrícula     : 500013
+- Papel         : Módulos, Sensores, Classes Concretas, UI e Manual de Execução
 
-Integrante 3:
-- Nome completo : [PREENCHER: Nome do Integrante 3]
-- Matrícula     : [PREENCHER: Matrícula]
-- Papel         : [PREENCHER: Ex.: Alertas, Interface Console (Main), Diagrama UML e Manual]
 
 --------------------------------------------------------------------------------
 2. MAPEAMENTO: QUEM IMPLEMENTOU O QUÊ
 --------------------------------------------------------------------------------
 
 [Interfaces e Classes Abstratas]
-- src/br/ufc/poo/bms/Balanceavel.java        -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/Monitoravel.java        -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/CarregamentoTurbo.java  -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/ModoFlutuacao.java      -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/ComponenteEletrico.java -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/CelulaBateria.java      -> [PREENCHER: Responsável]
+- src/br/ufc/poo/bms/Balanceavel.java        -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/Monitoravel.java        -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/CarregamentoTurbo.java  -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/ModoFlutuacao.java      -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/ComponenteEletrico.java -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/CelulaBateria.java      -> Ian Wanderley Gomes
 
 [Classes Concretas de Domínio e Herança]
-- src/br/ufc/poo/bms/CelulaLiFePO4.java      -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/CelulaLiIon.java        -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/SensorTemperatura.java  -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/ModuloBateria.java      -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/AlertaSistema.java      -> [PREENCHER: Responsável]
+- src/br/ufc/poo/bms/CelulaLiFePO4.java      -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/CelulaLiIon.java        -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/SensorTemperatura.java  -> Ian Wanderley Gomes
+- src/br/ufc/poo/bms/ModuloBateria.java      -> Marcos Venicius De Oliveira Pinto
+- src/br/ufc/poo/bms/AlertaSistema.java      -> Marcos Venicius De Oliveira Pinto
 
 [Controle, Utilitários e Execução]
-- src/br/ufc/poo/bms/ControladorBMS.java     -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/ConversorUnidades.java  -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/BmsUI.java              -> [PREENCHER: Responsável]
-- src/br/ufc/poo/bms/Main.java               -> [PREENCHER: Responsável]
+- src/br/ufc/poo/bms/ControladorBMS.java     -> Marcos Venicius De Oliveira Pinto
+- src/br/ufc/poo/bms/ConversorUnidades.java  -> Marcos Venicius De Oliveira Pinto
+- src/br/ufc/poo/bms/BmsUI.java              -> Marcos Venicius De Oliveira Pinto
+- src/br/ufc/poo/bms/Main.java               -> Ian Wanderley Gomes
 
 [Documentação e Diagrama UML]
-- diagrama_classes.puml                      -> [PREENCHER: Responsável]
-- MANUAL_EXECUCAO.md                         -> [PREENCHER: Responsável]
-- EQUIPE.txt                                 -> [PREENCHER: Responsável]
+- diagrama_classes.puml                      -> Ian Wanderley Gomes
+- MANUAL_EXECUCAO.md                         -> Marcos Venicius De Oliveira Pinto
+- EQUIPE.txt                                 -> Marcos Venicius De Oliveira Pinto
+
