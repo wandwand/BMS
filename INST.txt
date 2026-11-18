@@ -1,0 +1,60 @@
+Atue como um Engenheiro de Software Sênior especializado em Java e Programação Orientada a Objetos. Crie a estrutura completa do projeto de um Sistema de Gestão e Telemetria de Baterias (BMS) em Java puro (sem frameworks externos), atendendo rigorosamente aos requisitos da disciplina SMD0017 - POO da UFC.
+
+REGRAS OPERACIONAIS OBRIGATÓRIAS:
+1. Trabalhe EXCLUSIVAMENTE dentro do diretório atual do projeto. NÃO crie, edite, mova ou exclua nenhum arquivo fora desta pasta.
+2. NÃO execute nenhum comando git (como git init, git add, git commit, git push ou git pull) sem minha autorização explícita.
+
+ESTRUTURA DE DIRETÓRIOS E ARQUIVOS A SEREM CRIADOS:
+Crie todos os arquivos-fonte dentro de `src/br/ufc/poo/bms/` (ou no pacote padrão `src/` se não houver configuração de pacotes), além da documentação na raiz do projeto:
+
+1. INTERFACES E CLASSES ABSTRATAS:
+- `Balanceavel.java` (Interface): Define o método `void executarBalanceamentoPassivo(double tensaoAlvo);`.
+- `Monitoravel.java` (Interface): Define o método `String gerarRelatorioTelemetria();`.
+- `ComponenteEletrico.java` (Classe Abstrata):
+  - Atributos `protected`: `String id`, `double temperaturaCelsius`, `boolean operacional`.
+  - Construtor, getters/setters públicos e método abstrato `public abstract boolean realizarAutodiagnostico();`.
+- `CelulaBateria.java` (Classe Abstrata que estende `ComponenteEletrico`):
+  - Atributos `protected`: `double tensaoAtual`, `double correnteAtual`, `double capacidadeAh`.
+  - Métodos abstratos: `public abstract double calcularEstadoCarga();` e `public abstract boolean verificarSeguranca();`.
+  - Métodos concretos para simular carga/descarga alterando a tensão e temperatura.
+
+2. CLASSES CONCRETAS E HERANÇA:
+- `CelulaLiFePO4.java` (Estende `CelulaBateria`):
+  - Implementa curva de Estado de Carga (SoC) e limites de segurança específicos para LiFePO4 (tensão mínima 2.5V, máxima 3.65V, temperatura máxima 55°C).
+- `CelulaLiIon.java` (Estende `CelulaBateria`):
+  - Implementa curva de Estado de Carga (SoC) e limites de segurança específicos para Li-Ion NMC (tensão mínima 3.0V, máxima 4.2V, temperatura máxima 45°C).
+- `SensorTemperatura.java` (Estende `ComponenteEletrico`):
+  - Atributo `private String localizacao` e método para simular leitura térmica e autodiagnóstico.
+- `ModuloBateria.java` (Implementa `Balanceavel`):
+  - Atributos `private`: `String nomeModulo`, `List<CelulaBateria> celulas` (Composição: as células pertencem exclusivamente ao módulo).
+  - Métodos para adicionar células, calcular tensão total do módulo, calcular tensão média e executar o balanceamento passivo reduzindo levemente a tensão das células acima da média.
+- `AlertaSistema.java`:
+  - Atributo estático: `private static int totalAlertasGerados = 0;` (incrementado no construtor) + método `public static int getTotalAlertasGerados()`.
+  - Atributos `private`: `int idAlerta`, `String tipoFalha`, `String severidade`, `String mensagem`, `LocalDateTime timestamp`.
+- `ControladorBMS.java` (Implementa `Monitoravel`):
+  - Atributos `private`: `List<ModuloBateria> modulos` (Agregação), `List<SensorTemperatura> sensores` (Agregação), `List<AlertaSistema> historicoAlertas` (Associação Simples).
+  - Métodos para realizar varredura completa do sistema (chamando `realizarAutodiagnostico()`, `verificarSeguranca()` e `calcularEstadoCarga()` de forma polimórfica), acionar `Balanceavel` quando houver desbalanceamento entre células (> 0.05V) e registrar `AlertaSistema` em caso de anomalias.
+- `ConversorUnidades.java`:
+  - Classe utilitária com métodos estáticos (`public static double celsiusParaKelvin(double celsius)`, `public static double milivoltsParaVolts(double mv)`), usada como Dependência pelo `ControladorBMS` e pelas células.
+- `Main.java`:
+  - Ponto de entrada com um menu interativo no console (Scanner) que permita ao usuário:
+    1) Visualizar telemetria completa do BMS (tensão, temperatura em °C e K, SoC de cada célula).
+    2) Simular ciclo de carga (elevando tensões e temperaturas).
+    3) Simular ciclo de descarga.
+    4) Injetar falha simulada (ex: sobretensão ou superaquecimento em uma célula/sensor) para testar a geração de alertas e autodiagnóstico.
+    5) Acionar balanceamento ativo/passivo nos módulos.
+    6) Exibir histórico de alertas e o total global de alertas gerados (testando o atributo estático).
+
+3. DOCUMENTAÇÃO E DIAGRAMA (NA RAIZ DO PROJETO):
+- `diagrama_classes.puml`: Código PlantUML completo e fiel ao código-fonte gerado, representando explicitamente:
+  - As 4 heranças (setas de generalização);
+  - As 2 interfaces e 2 classes abstratas;
+  - Composição (`ModuloBateria` *-- `CelulaBateria`);
+  - Agregação (`ControladorBMS` o-- `ModuloBateria` e `ControladorBMS` o-- `SensorTemperatura`);
+  - Associação simples (`ControladorBMS` --> `AlertaSistema`);
+  - Dependência (`ControladorBMS` ..> `ConversorUnidades`);
+  - Visibilidade (`+` public, `#` protected, `-` private) e membros estáticos sublinhados.
+- `MANUAL_EXECUCAO.md`: Instruções claras de como compilar e executar o projeto via terminal (`javac` e `java`), além de como renderizar o arquivo `.puml`.
+- `EQUIPE.txt`: Template pronto contendo o mapeamento de quem implementou cada classe/módulo para preenchimento dos nomes e matrículas dos 3 integrantes.
+
+Após gerar todos os arquivos, compile o código com `javac` no terminal integrado para garantir que não há nenhum erro de sintaxe ou importação.

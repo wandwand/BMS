@@ -1,0 +1,203 @@
+@startuml
+title Diagrama de Classes - Sistema de Gestão e Telemetria de Baterias (BMS)
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+package "br.ufc.poo.bms" {
+
+    interface Balanceavel {
+        + executarBalanceamentoPassivo(tensaoAlvo : double) : void
+    }
+
+    interface Monitoravel {
+        + gerarRelatorioTelemetria() : String
+    }
+
+    interface CarregamentoTurbo {
+        + ativarModoTurbo() : void
+        + desativarModoTurbo() : void
+        + isModoTurboAtivo() : boolean
+    }
+
+    interface ModoFlutuacao {
+        + entrarModoFlutuacao() : void
+        + sairModoFlutuacao() : void
+        + isEmFlutuacao() : boolean
+    }
+
+    abstract class ComponenteEletrico {
+        # id : String
+        # temperaturaCelsius : double
+        # operacional : boolean
+        # ComponenteEletrico(id : String, temperaturaCelsius : double, operacional : boolean)
+        + getId() : String
+        + setId(id : String) : void
+        + getTemperaturaCelsius() : double
+        + setTemperaturaCelsius(temperaturaCelsius : double) : void
+        + isOperacional() : boolean
+        + setOperacional(operacional : boolean) : void
+        + {abstract} realizarAutodiagnostico() : boolean
+    }
+
+    abstract class CelulaBateria {
+        # tensaoAtual : double
+        # correnteAtual : double
+        # capacidadeAh : double
+        # CelulaBateria(id : String, temperaturaCelsius : double, operacional : boolean, tensaoAtual : double, correnteAtual : double, capacidadeAh : double)
+        + getTensaoAtual() : double
+        + setTensaoAtual(tensaoAtual : double) : void
+        + getCorrenteAtual() : double
+        + setCorrenteAtual(correnteAtual : double) : void
+        + getCapacidadeAh() : double
+        + setCapacidadeAh(capacidadeAh : double) : void
+        + simularCarga(deltaMilivolts : double, correnteCarga : double, deltaTemperatura : double) : void
+        + simularDescarga(deltaMilivolts : double, correnteDescarga : double, deltaTemperatura : double) : boolean
+        + {abstract} calcularEstadoCarga() : double
+        + {abstract} verificarSeguranca() : boolean
+    }
+
+    class CelulaLiFePO4 {
+        - {static} TENSAO_MIN : double = 2.50
+        - {static} TENSAO_MAX : double = 3.65
+        - {static} TEMPERATURA_MIN : double = -10.0
+        - {static} TEMPERATURA_MAX : double = 55.0
+        + CelulaLiFePO4(id : String, temperaturaCelsius : double, operacional : boolean, tensaoAtual : double, correnteAtual : double, capacidadeAh : double)
+        + calcularEstadoCarga() : double
+        + verificarSeguranca() : boolean
+        + realizarAutodiagnostico() : boolean
+    }
+
+    class CelulaLiIon {
+        - {static} TENSAO_MIN : double = 3.00
+        - {static} TENSAO_MAX : double = 4.20
+        - {static} TEMPERATURA_MIN : double = 0.0
+        - {static} TEMPERATURA_MAX : double = 45.0
+        + CelulaLiIon(id : String, temperaturaCelsius : double, operacional : boolean, tensaoAtual : double, correnteAtual : double, capacidadeAh : double)
+        + calcularEstadoCarga() : double
+        + verificarSeguranca() : boolean
+        + realizarAutodiagnostico() : boolean
+    }
+
+    class SensorTemperatura {
+        - {static} LIMITE_FISICO_MIN : double = -40.0
+        - {static} LIMITE_FISICO_MAX : double = 125.0
+        - {static} LIMITE_OPERACIONAL_MAX : double = 60.0
+        - localizacao : String
+        + SensorTemperatura(id : String, temperaturaCelsius : double, operacional : boolean, localizacao : String)
+        + getLocalizacao() : String
+        + setLocalizacao(localizacao : String) : void
+        + simularLeituraTermica(novaTemperaturaCelsius : double) : double
+        + realizarAutodiagnostico() : boolean
+    }
+
+    class ModuloBateria {
+        - nomeModulo : String
+        - celulas : List<CelulaBateria>
+        + ModuloBateria(nomeModulo : String)
+        + getNomeModulo() : String
+        + setNomeModulo(nomeModulo : String) : void
+        + getCelulas() : List<CelulaBateria>
+        + adicionarCelula(celula : CelulaBateria) : void
+        + calcularTensaoTotal() : double
+        + calcularTensaoMedia() : double
+        + calcularDesbalanceamento() : double
+        + executarBalanceamentoPassivo(tensaoAlvo : double) : void
+    }
+
+    class AlertaSistema {
+        - {static} totalAlertasGerados : int = 0
+        - idAlerta : int
+        - tipoFalha : String
+        - severidade : String
+        - mensagem : String
+        - timestamp : LocalDateTime
+        + AlertaSistema(tipoFalha : String, severidade : String, mensagem : String)
+        + {static} getTotalAlertasGerados() : int
+        + getIdAlerta() : int
+        + getTipoFalha() : String
+        + getSeveridade() : String
+        + getMensagem() : String
+        + getTimestamp() : LocalDateTime
+        + toString() : String
+    }
+
+    class ControladorBMS {
+        - {static} LIMITE_DESBALANCEAMENTO_V : double = 0.05
+        - modulos : List<ModuloBateria>
+        - sensores : List<SensorTemperatura>
+        - historicoAlertas : List<AlertaSistema>
+        + ControladorBMS()
+        + adicionarModulo(modulo : ModuloBateria) : void
+        + adicionarSensor(sensor : SensorTemperatura) : void
+        + getModulos() : List<ModuloBateria>
+        + getSensores() : List<SensorTemperatura>
+        + getHistoricoAlertas() : List<AlertaSistema>
+        + realizarVarreduraCompleta() : void
+        + gerarRelatorioTelemetria() : String
+    }
+
+    class ConversorUnidades <<utility>> {
+        - ConversorUnidades()
+        + {static} celsiusParaKelvin(celsius : double) : double
+        + {static} milivoltsParaVolts(mv : double) : double
+    }
+
+    class BmsUI {
+        - controlador : ControladorBMS
+        - painelModulos : JPanel
+        - painelSensores : JPanel
+        - txtAlertas : JTextArea
+        - txtTelemetria : JTextArea
+        - lblResumoStatus : JLabel
+        + BmsUI(controlador : ControladorBMS)
+        - configurarJanela() : void
+        - inicializarComponentes() : void
+        - atualizarInterface() : void
+    }
+
+    class Main {
+        + {static} main(args : String[]) : void
+        - {static} executarModoConsole(controlador : ControladorBMS) : void
+        - {static} inicializarSistema() : ControladorBMS
+        - {static} exibirMenu() : void
+        - {static} simularCicloCarga(controlador : ControladorBMS) : void
+        - {static} simularCicloDescarga(controlador : ControladorBMS) : void
+        - {static} injetarFalhaSimulada(controlador : ControladorBMS, scanner : Scanner) : void
+        - {static} acionarBalanceamentoManual(controlador : ControladorBMS) : void
+        - {static} exibirHistoricoAlertas(controlador : ControladorBMS) : void
+    }
+
+    ' --- 4 Heranças (Generalização) ---
+    CelulaBateria --|> ComponenteEletrico
+    CelulaLiFePO4 --|> CelulaBateria
+    CelulaLiIon --|> CelulaBateria
+    SensorTemperatura --|> ComponenteEletrico
+
+    ' --- Implementação de Interfaces ---
+    ModuloBateria ..|> Balanceavel
+    ControladorBMS ..|> Monitoravel
+    CelulaLiIon ..|> CarregamentoTurbo
+    CelulaLiFePO4 ..|> ModoFlutuacao
+
+    ' --- Composição ---
+    ModuloBateria "1" *-- "1..*" CelulaBateria : compõe
+
+    ' --- Agregação ---
+    ControladorBMS "1" o-- "1..*" ModuloBateria : agrega
+    ControladorBMS "1" o-- "1..*" SensorTemperatura : agrega
+
+    ' --- Associação Simples ---
+    ControladorBMS "1" --> "0..*" AlertaSistema : registra
+
+    ' --- Dependências ---
+    ControladorBMS ..> ConversorUnidades : usa
+    ControladorBMS ..> Balanceavel : aciona
+    CelulaBateria ..> ConversorUnidades : usa
+    BmsUI --> ControladorBMS : controla
+    BmsUI ..> ConversorUnidades : usa
+    Main ..> ControladorBMS : instancia e opera
+    Main ..> BmsUI : inicia interface
+}
+
+@enduml
