@@ -16,6 +16,7 @@ public sealed class MainForm : Form
     {
         _bms = bms;
         Text = "BMS UFC + BMSLogic (C# / .NET 10)";
+        Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         Size = new Size(1120, 720);
         StartPosition = FormStartPosition.CenterScreen;
         BackColor = Color.FromArgb(24, 26, 32);

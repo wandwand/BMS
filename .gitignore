@@ -12,3 +12,4 @@ TestResults/
 *.coverage
 *.coveragexml
 publish/
+*.lnk
