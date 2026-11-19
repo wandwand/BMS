@@ -1,0 +1,18 @@
+Name,Value,Reference
+R0 ref [ohm],0.008,BMS UFC / LiFePO4
+R1_ref [ohm],0.003,BMS UFC / LiFePO4
+C1 [F],1200.0,BMS UFC / LiFePO4
+temp_ref [K],298.15,BMS UFC / LiFePO4
+Ea_R0 [J/mol],400,bmslogic
+Ea_R1 [J/mol],400,bmslogic
+rho [kg/m3],2100,LiFePO4 typical
+vol [m3],3.5E-05,LiFePO4 prismatic/cylindrical
+C_p [J/(Kkg)],950,LiFePO4 typical
+h [J/(SK)],1.2,BMS UFC
+cap [Ahr],3.2,LiFePO4 3.2Ah
+V_max [V],3.65,BMS UFC LiFePO4
+V_min [V],2.50,BMS UFC LiFePO4
+M_0 [V],0.015,Hysteresis LiFePO4
+M [V],0.025,Hysteresis LiFePO4
+gamma,2.0,Hysteresis LiFePO4
+area [m2],0.085,Guo et al.
